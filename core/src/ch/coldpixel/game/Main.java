@@ -35,7 +35,7 @@ public class Main extends ApplicationAdapter {
         //Spritebatch
         batch = new SpriteBatch();
         //Textures
-        img = new Texture("badlogic.jpg");
+        img = new Texture("Background.png");
         test = new Texture("Unbenannt.png");
         //FPS
         fps = new FPSLogger();
@@ -51,9 +51,10 @@ public class Main extends ApplicationAdapter {
         for(int i = 0; i< WINDOW_WIDTH; i+=TILESIZE) {
             for(int j = 0; j < WINDOW_HEIGTH; j+=TILESIZE) {
                 batch.draw(test, i, j);
+                batch.draw(img,i,j);
             }
         }
-      //  batch.draw(img, 0, 0);
+        batch.draw(img, 0, 0);
         batch.end();
         fps.log();
     }
