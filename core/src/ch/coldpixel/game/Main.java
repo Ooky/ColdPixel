@@ -53,7 +53,7 @@ public class Main extends ApplicationAdapter {
                 batch.draw(test, i, j);
             }
         }
-        batch.draw(img, 0, 0);
+      //  batch.draw(img, 0, 0);
         batch.end();
         fps.log();
     }
