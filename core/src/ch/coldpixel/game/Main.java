@@ -38,7 +38,7 @@ public class Main extends ApplicationAdapter {
     //Array
     int kachelarr[][];
     //Shaperenderer
-    ShapeRenderer grid;
+    ShapeRenderer shape;
 
 //==============================================================================
 //Methods
@@ -57,16 +57,16 @@ public class Main extends ApplicationAdapter {
         //Array
         kachelarr = new int[WINDOW_WIDTH / TILESIZE][WINDOW_WIDTH / TILESIZE];
         //Shaperenderer
-        grid = new ShapeRenderer();
+        shape = new ShapeRenderer();
         //player
         player = new Player(32, 32);
-
     }
 
     @Override
     public void render() {
         Gdx.gl.glClearColor(0, 255, 255, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        background();
         batch.begin();
         batch.draw(player.getCharacter(), player.getXPosition(), player.getYPosition());
         player.movement();
@@ -81,7 +81,7 @@ public class Main extends ApplicationAdapter {
     @Override
     public void dispose() {
         batch.dispose();
-        grid.dispose();
+        shape.dispose();
         ground.dispose();
         player.getCharacter().dispose();
     }
@@ -89,15 +89,23 @@ public class Main extends ApplicationAdapter {
     private void showGrid() {
         //Show Grid if G is pressed
         if (Gdx.input.isKeyPressed(Input.Keys.G)) {
-            grid.begin(ShapeRenderer.ShapeType.Line);
-            grid.setColor(Color.RED);
+            shape.begin(ShapeRenderer.ShapeType.Line);
+            shape.setColor(Color.RED);
             for (int i = 0; i <= LEVEL_1_WIDTH; i += TILESIZE) {
                 for (int j = 0; j <= LEVEL_1_HEIGTH; j += TILESIZE) {
-                    grid.rect(0, 0, i, j);
+                    shape.rect(0, 0, i, j);
                 }
             }
         }
-        grid.setColor(Color.CLEAR);
-        grid.end();
+        shape.setColor(Color.CLEAR);
+        shape.end();
+    }
+
+    private void background() {
+        shape.begin(ShapeRenderer.ShapeType.Filled);
+        shape.rect(0, 0, LEVEL_1_WIDTH, LEVEL_1_HEIGTH, Color.ORANGE, Color.ORANGE, Color.BLUE, Color.BLUE);
+        shape.setColor(Color.YELLOW);
+        shape.circle(100, WINDOW_HEIGTH - 100, 50, 30);
+        shape.end();
     }
 }
