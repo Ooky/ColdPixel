@@ -5,6 +5,7 @@
 package ch.coldpixel.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.Rectangle;
 
 /**
@@ -12,7 +13,9 @@ import com.badlogic.gdx.math.Rectangle;
  * @author Mike
  */
 public class Player {
+    //Rectangle
     private Rectangle player;
+    //constructor   x=Spawn X Coordinate y=Spawn Y Coordinate
     public Player(float x, float y) {
         player = new Rectangle();
         player.x = x;
@@ -20,28 +23,30 @@ public class Player {
         player.width = 32;
         player.height = 64;
     }
-    
+    //Getter
     public float getXPosition(){
         return player.x;
     }
     
-    public float getyPosition(){
+    public float getYPosition(){
         return player.y;
     }
-    
+    //Setter
     public void setXPosition(float x){
         player.x =x;
     }
     
-    public void setPosition(float y){
+    public void setYPosition(float y){
          player.y = y;
     }
     
-    public void moveLeft(){
-        player.x -= 200 * Gdx.graphics.getDeltaTime();
-    }
-    
-    public void moveRight(){
-        player.x += 200 * Gdx.graphics.getDeltaTime();
+    //Movement
+    public void movement(){
+        if(Gdx.input.isKeyPressed(Keys.A) || Gdx.input.isKeyPressed(Keys.LEFT)){
+            this.setXPosition(this.getXPosition()-200 * Gdx.graphics.getDeltaTime());
+        }
+        if(Gdx.input.isKeyPressed(Keys.D) || Gdx.input.isKeyPressed(Keys.RIGHT)){
+            this.setXPosition(this.getXPosition()+200 * Gdx.graphics.getDeltaTime());
+        }
     }
 }

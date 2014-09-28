@@ -3,7 +3,6 @@ package ch.coldpixel.game;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -71,9 +70,8 @@ public class Main extends ApplicationAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         fps.log();
         batch.begin();
-        batch.draw(character, player.getXPosition(), player.getyPosition());
-        if(Gdx.input.isKeyPressed(Keys.A) || Gdx.input.isKeyPressed(Keys.LEFT))player.moveLeft();
-        if(Gdx.input.isKeyPressed(Keys.D) || Gdx.input.isKeyPressed(Keys.RIGHT)) player.moveRight();
+        batch.draw(character, player.getXPosition(), player.getYPosition());
+        player.movement();
         for(int i=0;i<32;i++){
             batch.draw(ground, i*32, 0);
         }
