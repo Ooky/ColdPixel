@@ -3,6 +3,7 @@ package ch.coldpixel.game;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -28,6 +29,8 @@ public class Main extends ApplicationAdapter {
     public static final int LEVEL_1_WIDTH = WINDOW_WIDTH * 3;
     public static final int LEVEL_1_HEIGTH = WINDOW_HEIGTH;
     private final int TILESIZE = 32;
+    //Player
+    private Player player;
     //Textures
     private static Texture ground, character;
     SpriteBatch batch;
@@ -57,6 +60,9 @@ public class Main extends ApplicationAdapter {
         kachelarr = new int[WINDOW_WIDTH / TILESIZE][WINDOW_WIDTH / TILESIZE];
         //Shaperenderer
         grid = new ShapeRenderer();
+        //player
+        player = new Player(32,32);
+        
     }
 
     @Override
@@ -65,7 +71,9 @@ public class Main extends ApplicationAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         fps.log();
         batch.begin();
-        batch.draw(character, 64, 32);
+        batch.draw(character, player.getXPosition(), player.getyPosition());
+        if(Gdx.input.isKeyPressed(Keys.A) || Gdx.input.isKeyPressed(Keys.LEFT))player.moveLeft();
+        if(Gdx.input.isKeyPressed(Keys.D) || Gdx.input.isKeyPressed(Keys.RIGHT)) player.moveRight();
         for(int i=0;i<32;i++){
             batch.draw(ground, i*32, 0);
         }
