@@ -12,12 +12,14 @@ public class DesktopLauncher {
         config.width = Main.WINDOW_WIDTH;
         config.height = Main.WINDOW_HEIGTH;
         config.title = Main.GAMENAME;
-        config.resizable = false;
+        config.resizable = Main.RESZIABLE;
         config.addIcon(Main.FAVICON, Files.FileType.Internal);
-        //Shows the "real" fps, 0 disables throttling 
-//        config.vSyncEnabled = false;
-//        config.foregroundFPS = 0;
-//        config.backgroundFPS = 0;
+        if (Main.MAX_FPS) {
+            //Shows the "real" fps, 0 disables throttling 
+            config.vSyncEnabled = false;
+            config.foregroundFPS = 0;
+            config.backgroundFPS = 0;
+        }
         new LwjglApplication(new Main(), config);
     }
 }
