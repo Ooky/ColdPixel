@@ -17,7 +17,7 @@ public class Main extends ApplicationAdapter {
 //==============================================================================
     //DesktopLauncher
     public static final boolean RESZIABLE = false;
-    public static final boolean MAX_FPS=false;
+    public static final boolean MAX_FPS = false;
     public static final int WINDOW_WIDTH = 1024;
     public static final int WINDOW_HEIGTH = 512 + 128;
     public static final String GAMENAME = "Cold Pixel - Runner";
@@ -31,7 +31,7 @@ public class Main extends ApplicationAdapter {
     //Player
     private Player player;
     //Textures
-    private static Texture ground, character;
+    private static Texture ground;
     SpriteBatch batch;
     //FPS
     FPSLogger fps;
@@ -49,7 +49,6 @@ public class Main extends ApplicationAdapter {
         batch = new SpriteBatch();
         //Textures
         ground = new Texture(Gdx.files.internal("ground.png"));
-        character = new Texture(Gdx.files.internal("GameCharacter.png"));
         //FPS
         fps = new FPSLogger();
         //Camera
@@ -60,23 +59,23 @@ public class Main extends ApplicationAdapter {
         //Shaperenderer
         grid = new ShapeRenderer();
         //player
-        player = new Player(32,32);
-        
+        player = new Player(32, 32);
+
     }
 
     @Override
     public void render() {
         Gdx.gl.glClearColor(0, 255, 255, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        fps.log();
         batch.begin();
-        batch.draw(character, player.getXPosition(), player.getYPosition());
+        batch.draw(player.getCharacter(), player.getXPosition(), player.getYPosition());
         player.movement();
-        for(int i=0;i<32;i++){
-            batch.draw(ground, i*32, 0);
+        for (int i = 0; i < 32; i++) {
+            batch.draw(ground, i * TILESIZE, 0);
         }
         batch.end();
         showGrid();
+        fps.log();
     }
 
     @Override
@@ -84,6 +83,7 @@ public class Main extends ApplicationAdapter {
         batch.dispose();
         grid.dispose();
         ground.dispose();
+        player.getCharacter().dispose();
     }
 
     private void showGrid() {
