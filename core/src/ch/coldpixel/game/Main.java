@@ -5,7 +5,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
@@ -21,8 +20,6 @@ public class Main extends ApplicationAdapter {
     public static final int WINDOW_HEIGTH = 512 + 128;
     public static final String GAMENAME = "Cold Pixel - Runner";
     public static final String FAVICON = "Graphics/Icon/Icon.png";
-    //Camera
-    private OrthographicCamera camera;
     //LevelSize
     public static final int LEVEL_1_WIDTH = WINDOW_WIDTH * 3;
     public static final int LEVEL_1_HEIGTH = WINDOW_HEIGTH;
@@ -43,21 +40,18 @@ public class Main extends ApplicationAdapter {
     public void create() {
         //Spritebatch
         batch = new SpriteBatch();
-        //Camera
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false, WINDOW_WIDTH, WINDOW_HEIGTH);
         //Textures
         //FPS
         fps = new FPSLogger();
         //Array
-        kachelarr = new int[LEVEL_1_WIDTH / TILESIZE][LEVEL_1_HEIGTH / TILESIZE];
+        kachelarr = new int[WINDOW_WIDTH / TILESIZE][WINDOW_WIDTH / TILESIZE];
         //Shaperenderer
         grid = new ShapeRenderer();
     }
 
     @Override
     public void render() {
-        Gdx.gl.glClearColor(0, 0, 255, 1);
+        Gdx.gl.glClearColor(0, 255, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         showGrid();
         fps.log();
