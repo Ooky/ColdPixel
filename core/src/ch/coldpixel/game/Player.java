@@ -34,27 +34,62 @@ public class Player {
         player = new Rectangle();
         player.x = x;
         player.y = y;
-        player.width = 32;
+        player.width = 64;
         player.height = 64;
         character = new Texture(Gdx.files.internal("GameCharacter.png"));
     }
 
-    //Movement
+    public void gravity() {
+        //TODO GRAVITY
+    }
+
     public void movement() {
-        if (Gdx.input.isKeyPressed(Keys.A) || Gdx.input.isKeyPressed(Keys.LEFT)) {
-            if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Keys.SHIFT_RIGHT)) {
-                this.setXPosition(this.getXPosition() - runSpeed * Gdx.graphics.getDeltaTime());
+        if (leftOrA()) {
+            if (isRunning()) {
+                runLeft();
             } else {
-                this.setXPosition(this.getXPosition() - walkSpeed * Gdx.graphics.getDeltaTime());
+                walkLeft();
             }
         }
-        if (Gdx.input.isKeyPressed(Keys.D) || Gdx.input.isKeyPressed(Keys.RIGHT)) {
-            if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Keys.SHIFT_RIGHT)) {
-                this.setXPosition(this.getXPosition() + runSpeed * Gdx.graphics.getDeltaTime());
+        if (rightOrD()) {
+            if (isRunning()) {
+                runRight();
             } else {
-                this.setXPosition(this.getXPosition() + walkSpeed * Gdx.graphics.getDeltaTime());
+                walkRight();
             }
         }
+    }
+
+//==============================================================================
+//Keycode
+//==============================================================================
+    //Movement
+    private boolean leftOrA() {
+        return Gdx.input.isKeyPressed(Keys.A) || Gdx.input.isKeyPressed(Keys.LEFT);
+    }
+
+    private boolean isRunning() {
+        return Gdx.input.isKeyPressed(Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Keys.SHIFT_RIGHT);
+    }
+
+    private void runLeft() {
+        this.setXPosition(this.getXPosition() - runSpeed * Gdx.graphics.getDeltaTime());
+    }
+
+    private void walkLeft() {
+        this.setXPosition(this.getXPosition() - walkSpeed * Gdx.graphics.getDeltaTime());
+    }
+
+    private boolean rightOrD() {
+        return Gdx.input.isKeyPressed(Keys.D) || Gdx.input.isKeyPressed(Keys.RIGHT);
+    }
+
+    private void runRight() {
+        this.setXPosition(this.getXPosition() + runSpeed * Gdx.graphics.getDeltaTime());
+    }
+
+    private void walkRight() {
+        this.setXPosition(this.getXPosition() + walkSpeed * Gdx.graphics.getDeltaTime());
     }
 
 //==============================================================================

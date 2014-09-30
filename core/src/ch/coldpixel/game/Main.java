@@ -6,7 +6,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
@@ -27,18 +26,16 @@ public class Main extends ApplicationAdapter {
     //LevelSize
     public static final int LEVEL_1_WIDTH = WINDOW_WIDTH * 3;
     public static final int LEVEL_1_HEIGTH = WINDOW_HEIGTH;
-    private final int TILESIZE = 32;
+    public static final int TILESIZE = 16;
     //Player
     private Player player;
-    //Textures
-    private static Texture ground;
     SpriteBatch batch;
     //FPS
     FPSLogger fps;
-    //Array
-    int kachelarr[][];
     //Shaperenderer
     ShapeRenderer shape;
+    //MapDrawing
+    MapDrawing mapdrawing;
 
 //==============================================================================
 //Methods
@@ -47,19 +44,17 @@ public class Main extends ApplicationAdapter {
     public void create() {
         //Spritebatch
         batch = new SpriteBatch();
-        //Textures
-        ground = new Texture(Gdx.files.internal("ground.png"));
         //FPS
         fps = new FPSLogger();
         //Camera
         camera = new OrthographicCamera();
         camera.setToOrtho(false, WINDOW_WIDTH, WINDOW_HEIGTH);
-        //Array
-        kachelarr = new int[WINDOW_WIDTH / TILESIZE][WINDOW_WIDTH / TILESIZE];
         //Shaperenderer
         shape = new ShapeRenderer();
-        //player
-        player = new Player(32, 32);
+        //Player
+        player = new Player(500, 500);
+        //MapDrawing
+        mapdrawing = new MapDrawing(TILESIZE, TILESIZE);
     }
 
     @Override
@@ -68,12 +63,10 @@ public class Main extends ApplicationAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         background();
         batch.begin();
+        mapdrawing.MapRender(batch);
         batch.draw(player.getCharacter(), player.getXPosition(), player.getYPosition());
-        player.movement();
-        for (int i = 0; i < 32; i++) {
-            batch.draw(ground, i * TILESIZE, 0);
-        }
         batch.end();
+        player.movement();
         showGrid();
         fps.log();
     }
@@ -82,7 +75,6 @@ public class Main extends ApplicationAdapter {
     public void dispose() {
         batch.dispose();
         shape.dispose();
-        ground.dispose();
         player.getCharacter().dispose();
     }
 
@@ -103,9 +95,9 @@ public class Main extends ApplicationAdapter {
 
     private void background() {
         shape.begin(ShapeRenderer.ShapeType.Filled);
-        shape.rect(0, 0, LEVEL_1_WIDTH, LEVEL_1_HEIGTH, Color.ORANGE, Color.ORANGE, Color.BLUE, Color.BLUE);
+        shape.rect(0, 0, LEVEL_1_WIDTH, LEVEL_1_HEIGTH, Color.BLUE, Color.BLUE, Color.ORANGE, Color.ORANGE);
         shape.setColor(Color.YELLOW);
-        shape.circle(100, WINDOW_HEIGTH - 100, 50, 30);
+        shape.circle(100, WINDOW_HEIGTH - 100, 50, 5);
         shape.end();
     }
 }
