@@ -31,6 +31,8 @@ public class MapDrawing {
     private static Texture ground;
     //Shaperenderer
     ShapeRenderer shape;
+    //Camera
+    Camera cam;
 
 //==============================================================================
 //Methods
@@ -42,6 +44,8 @@ public class MapDrawing {
         ground = new Texture(Gdx.files.internal("ground.png"));
         //ShapeRenderer
         shape = new ShapeRenderer();
+        //Camera
+        cam = new Camera();
     }
 
     public void MapRender(SpriteBatch batch) {

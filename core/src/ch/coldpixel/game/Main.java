@@ -43,7 +43,7 @@ public class Main extends ApplicationAdapter {
         //Camera
         cam = new Camera();
         //Player
-        player = new Player(500, 500);
+        player = new Player((WINDOW_WIDTH/2)-32, (WINDOW_HEIGTH/2)-32);
         //MapDrawing
         mapdrawing = new MapDrawing(TILESIZE, TILESIZE);
     }
