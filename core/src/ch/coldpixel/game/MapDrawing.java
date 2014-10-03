@@ -5,9 +5,16 @@
  */
 package ch.coldpixel.game;
 
+import static ch.coldpixel.game.Main.LEVEL_1_HEIGTH;
+import static ch.coldpixel.game.Main.LEVEL_1_WIDTH;
+import static ch.coldpixel.game.Main.TILESIZE;
+import static ch.coldpixel.game.Main.WINDOW_HEIGTH;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 /**
  *
@@ -22,6 +29,8 @@ public class MapDrawing {
     MapModel mapmodel;
     //Textures
     private static Texture ground;
+    //Shaperenderer
+    ShapeRenderer shape;
 
 //==============================================================================
 //Methods
@@ -30,7 +39,7 @@ public class MapDrawing {
         //Mapmodel
         mapmodel = new MapModel(tileWidth, tileHeight);
         //Textures
-        this.ground = new Texture(Gdx.files.internal("ground.png"));
+        ground = new Texture(Gdx.files.internal("ground.png"));
     }
 
     public void MapRender(SpriteBatch batch) {
@@ -45,6 +54,29 @@ public class MapDrawing {
 
             }
         }
+    }
+
+    public void background() {
+        shape.begin(ShapeRenderer.ShapeType.Filled);
+        shape.rect(0, 0, LEVEL_1_WIDTH, LEVEL_1_HEIGTH, Color.BLUE, Color.BLUE, Color.ORANGE, Color.ORANGE);
+        shape.setColor(Color.YELLOW);
+        shape.circle(100, WINDOW_HEIGTH - 100, 50, 5);
+        shape.end();
+    }
+
+    public void showGrid() {
+        //Show Grid if G is pressed
+        if (Gdx.input.isKeyPressed(Input.Keys.G)) {
+            shape.begin(ShapeRenderer.ShapeType.Line);
+            shape.setColor(Color.RED);
+            for (int i = 0; i <= LEVEL_1_WIDTH; i += TILESIZE) {
+                for (int j = 0; j <= LEVEL_1_HEIGTH; j += TILESIZE) {
+                    shape.rect(0, 0, i, j);
+                }
+            }
+        }
+        shape.setColor(Color.CLEAR);
+        shape.end();
     }
 
 }
