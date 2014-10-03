@@ -36,7 +36,7 @@ public class Player {
         player.y = y;
         player.width = 64;
         player.height = 64;
-        character = new Texture(Gdx.files.internal("GameCharacter.png"));
+        character = new Texture(Gdx.files.internal("GameCharacter_idle.png"));
     }
 
     public void gravity() {

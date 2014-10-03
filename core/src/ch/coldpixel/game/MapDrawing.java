@@ -40,6 +40,8 @@ public class MapDrawing {
         mapmodel = new MapModel(tileWidth, tileHeight);
         //Textures
         ground = new Texture(Gdx.files.internal("ground.png"));
+        //ShapeRenderer
+        shape = new ShapeRenderer();
     }
 
     public void MapRender(SpriteBatch batch) {
