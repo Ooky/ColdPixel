@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import static ch.coldpixel.game.Main.TILESIZE;
 
 /**
  *
@@ -25,19 +26,20 @@ public class MapDrawing {
 //==============================================================================
 //Initialization
 //==============================================================================
-    //MapModel
-    MapModel mapmodel;
     //Textures
     private static Texture ground;
-    //Shaperenderer
+    //MapModel
+    private MapModel mapmodel;
+    //Array
+    private int[][] arrTiles;
     ShapeRenderer shape;
 
 //==============================================================================
 //Methods
 //==============================================================================
-    public MapDrawing(int tileWidth, int tileHeight) {
+    public MapDrawing(int tileWidth, int tileHeight, MapModel mapmodel) {
         //Mapmodel
-        mapmodel = new MapModel(tileWidth, tileHeight);
+        this.mapmodel=mapmodel;
         //Textures
         ground = new Texture(Gdx.files.internal("ground.png"));
         //ShapeRenderer
@@ -51,7 +53,7 @@ public class MapDrawing {
                     case 0://Nothing
                         break;
                     case 1://Ground
-                        batch.draw(ground, i * 32, j * 32);
+                        batch.draw(ground, i * TILESIZE, j * TILESIZE);
                 }
 
             }

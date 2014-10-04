@@ -29,7 +29,10 @@ public class Main extends ApplicationAdapter {
     //FPS
     FPSLogger fps;
     //MapDrawing
-    MapDrawing mapdrawing;
+    private MapDrawing mapdrawing;
+    //Load Level
+    Load mapString;
+    private MapModel mapmodel;
 
 //==============================================================================
 //Methods
@@ -44,8 +47,13 @@ public class Main extends ApplicationAdapter {
         cam = new Camera();
         //Player
         player = new Player((WINDOW_WIDTH/2)-32, (WINDOW_HEIGTH/2)-32);
+        //Load Level
+        mapString = new Load();
+        //Mapmodel
+        mapmodel = new MapModel(TILESIZE, TILESIZE);
+        mapmodel.setMapModel(mapString.getLevel(1));
         //MapDrawing
-        mapdrawing = new MapDrawing(TILESIZE, TILESIZE);
+        mapdrawing = new MapDrawing(TILESIZE, TILESIZE,mapmodel);
     }
 
     @Override

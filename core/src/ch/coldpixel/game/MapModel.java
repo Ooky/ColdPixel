@@ -6,7 +6,8 @@
 package ch.coldpixel.game;
 
 import static ch.coldpixel.game.Main.WINDOW_WIDTH;
-
+import static ch.coldpixel.game.Main.LEVEL_1_WIDTH;
+import static ch.coldpixel.game.Main.LEVEL_1_HEIGTH;
 /**
  *
  * @author Ooky
@@ -18,23 +19,37 @@ public class MapModel {
 //==============================================================================
     //Array
     final int[][] arrTiles;
+    //int loop array
+    int x=0;
 
 //==============================================================================
 //Methods
 //==============================================================================
     MapModel(int tileWidth, int tileHeight) {
         //Array
-        arrTiles = new int[WINDOW_WIDTH / tileWidth][WINDOW_WIDTH / tileHeight];
+        arrTiles = new int[LEVEL_1_WIDTH / tileWidth][LEVEL_1_HEIGTH / tileHeight];
         //0=Background
         for (int i = 0; i < arrTiles.length; i++) {
             for (int j = 0; j < arrTiles[0].length; j++) {
                 arrTiles[i][j] = 0;
             }
         }
-        //1=Ground
-        for (int i = 0; i < arrTiles.length; i++) {
-            arrTiles[i][0] = 1;
+    }
+    
+    void setMapModel(String mapString){
+        mapString = mapString.replaceAll("[\n\r]", "");
+        for (int j = 0; j < arrTiles[0].length; j++) {
+            for (int i = 0; i < arrTiles.length; i++) {
+                if(mapString.charAt(x)!=' '){
+                    arrTiles[i][j] = Character.getNumericValue(mapString.charAt(x));
+                }
+                x++;
+            }
         }
+    }
+    
+    int[][] getArrTiles(){
+        return arrTiles;
     }
 
 }
