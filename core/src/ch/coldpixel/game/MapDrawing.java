@@ -27,7 +27,7 @@ public class MapDrawing {
 //Initialization
 //==============================================================================
     //Textures
-    private static Texture ground;
+    private static Texture ground,groundTop;
     //MapModel
     private MapModel mapmodel;
     //Array
@@ -42,18 +42,24 @@ public class MapDrawing {
         this.mapmodel=mapmodel;
         //Textures
         ground = new Texture(Gdx.files.internal("ground.png"));
+        groundTop = new Texture(Gdx.files.internal("groundTop.png"));
         //ShapeRenderer
         shape = new ShapeRenderer();
     }
 
     public void MapRender(SpriteBatch batch) {
-        for (int i = 0; i < mapmodel.arrTiles.length; i++) {
-            for (int j = 0; j < mapmodel.arrTiles[0].length; j++) {
-                switch (mapmodel.arrTiles[i][j]) {
+        arrTiles = mapmodel.getArrTiles();
+        for (int i = 0; i < arrTiles.length; i++) {
+            for (int j = 0; j < arrTiles[0].length; j++) {
+                switch (arrTiles[i][j]) {
                     case 0://Nothing
                         break;
                     case 1://Ground
                         batch.draw(ground, i * TILESIZE, j * TILESIZE);
+                        break;
+                    case 2://GroundTop
+                        batch.draw(groundTop, i * TILESIZE, j * TILESIZE);
+                        break;
                 }
 
             }

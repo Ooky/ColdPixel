@@ -38,8 +38,8 @@ public class MapModel {
     
     void setMapModel(String mapString){
         mapString = mapString.replaceAll("[\n\r]", "");
-        for (int j = 0; j < arrTiles[0].length; j++) {
-            for (int i = 0; i < arrTiles.length; i++) {
+        for (int j = arrTiles[0].length-1; j >= 0; j--) {
+            for (int i = arrTiles.length-1; i >= 0; i--) {
                 if(mapString.charAt(x)!=' '){
                     arrTiles[i][j] = Character.getNumericValue(mapString.charAt(x));
                 }
