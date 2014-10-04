@@ -24,6 +24,8 @@ public class Player {
     private final Texture character;
     //Movemenetspeed
     private final int walkSpeed = 200;
+    private final int fallSpeed = 200;
+    private final int jumpSpeed = 100;
     private final int runSpeed = (int) (walkSpeed * 1.5);
 //==============================================================================
 //Methods
@@ -58,6 +60,14 @@ public class Player {
                 walkRight();
             }
         }
+        //Jump
+        if(space()){
+            jump();
+        }
+        // Gravitation
+        if (isFalling() && !space()) {
+            fall();
+        }
     }
 
 //==============================================================================
@@ -83,6 +93,10 @@ public class Player {
     private boolean rightOrD() {
         return Gdx.input.isKeyPressed(Keys.D) || Gdx.input.isKeyPressed(Keys.RIGHT);
     }
+    //Jump
+    private boolean space() {
+        return Gdx.input.isKeyPressed(Keys.SPACE);
+    }
 
     private void runRight() {
         this.setXPosition(this.getXPosition() + runSpeed * Gdx.graphics.getDeltaTime());
@@ -91,6 +105,15 @@ public class Player {
     private void walkRight() {
         this.setXPosition(this.getXPosition() + walkSpeed * Gdx.graphics.getDeltaTime());
     }
+    
+    private void jump(){
+         this.setYPosition(this.getYPosition() + jumpSpeed * Gdx.graphics.getDeltaTime());
+    }
+    
+    private void fall(){
+        this.setYPosition(this.getYPosition()-fallSpeed * Gdx.graphics.getDeltaTime());
+    }
+    
 
 //==============================================================================
 //Getter
@@ -116,5 +139,12 @@ public class Player {
 
     public void setYPosition(float y) {
         player.y = y;
+    }
+    
+//==============================================================================
+//State
+//==============================================================================
+    public boolean isFalling() {
+        return this.getYPosition() > 0;
     }
 }

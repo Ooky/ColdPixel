@@ -46,7 +46,7 @@ public class Main extends ApplicationAdapter {
         //Camera
         cam = new Camera();
         //Player
-        player = new Player(0, 64);
+        player = new Player(0,320);
         //Load Level
         mapString = new Load();
         //Mapmodel

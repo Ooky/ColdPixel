@@ -16,11 +16,12 @@ public class Load {
     FileHandle file;
     String text;
 
-    
+    //Returns the context of a text file as a string
     public String getLevel(int level){
         switch(level){
             case 1:
                 file = Gdx.files.internal("level/level1.txt"); 
+                //Returns file as string
                 text = file.readString();
                 return text;
             default:

@@ -37,10 +37,12 @@ public class MapModel {
     }
     
     void setMapModel(String mapString){
+        //remove linebreaks from string
         mapString = mapString.replaceAll("[\n\r]", "");
         for (int j = arrTiles[0].length-1; j >= 0; j--) {
             for (int i = arrTiles.length-1; i >= 0; i--) {
                 if(mapString.charAt(x)!=' '){
+                    //Get Character from File at Position X and change type to numeric(int)
                     arrTiles[i][j] = Character.getNumericValue(mapString.charAt(x));
                 }
                 x++;
