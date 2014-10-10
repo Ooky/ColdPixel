@@ -24,9 +24,9 @@ public class Player {
     private final Texture character;
     //Movemenetspeed
     private final int walkSpeed = 200;
-    private final int fallSpeed = 200;
-    private final int jumpSpeed = 100;
+    private float velocity = 0;
     private final int runSpeed = (int) (walkSpeed * 1.5);
+    private final float acceleration = 500;
 //==============================================================================
 //Methods
 //==============================================================================
@@ -46,6 +46,14 @@ public class Player {
     }
 
     public void movement() {
+        //DDELETE THIS
+        if (r()) {
+            resetPosition();
+        }
+        //DELETE THIS ABOVE
+        if (!isFalling() && !space()) {
+            velocity = 0;
+        }
         if (leftOrA()) {
             if (isRunning()) {
                 runLeft();
@@ -61,18 +69,26 @@ public class Player {
             }
         }
         //Jump
-        if(space()){
+        if (space() && !isFalling()) {
             jump();
         }
         // Gravitation
-        if (isFalling() && !space()) {
-            fall();
-        }
+        fall();
+
     }
 
 //==============================================================================
 //Keycode
 //==============================================================================
+    //Resets Player position, but not speed
+    private boolean r() {
+        return Gdx.input.isKeyPressed(Keys.R);
+    }
+
+    private void resetPosition() {
+        this.setYPosition(500);
+    }
+
     //Movement
     private boolean leftOrA() {
         return Gdx.input.isKeyPressed(Keys.A) || Gdx.input.isKeyPressed(Keys.LEFT);
@@ -93,6 +109,7 @@ public class Player {
     private boolean rightOrD() {
         return Gdx.input.isKeyPressed(Keys.D) || Gdx.input.isKeyPressed(Keys.RIGHT);
     }
+
     //Jump
     private boolean space() {
         return Gdx.input.isKeyPressed(Keys.SPACE);
@@ -105,15 +122,19 @@ public class Player {
     private void walkRight() {
         this.setXPosition(this.getXPosition() + walkSpeed * Gdx.graphics.getDeltaTime());
     }
-    
-    private void jump(){
-         this.setYPosition(this.getYPosition() + jumpSpeed * Gdx.graphics.getDeltaTime());
+
+    private void jump() {
+        velocity = 3000;
+        this.setYPosition(this.getYPosition() + velocity * Gdx.graphics.getDeltaTime());
     }
-    
-    private void fall(){
-        this.setYPosition(this.getYPosition()-fallSpeed * Gdx.graphics.getDeltaTime());
+
+    private void fall() {
+        if (isFalling() && !space()) {
+            velocity = velocity + acceleration * Gdx.graphics.getDeltaTime();
+
+            this.setYPosition(this.getYPosition() - velocity * Gdx.graphics.getDeltaTime());
+        }
     }
-    
 
 //==============================================================================
 //Getter
@@ -140,11 +161,11 @@ public class Player {
     public void setYPosition(float y) {
         player.y = y;
     }
-    
+
 //==============================================================================
 //State
 //==============================================================================
     public boolean isFalling() {
-        return this.getYPosition() > 0;
+        return this.getYPosition() > 64;
     }
-}
+} 
