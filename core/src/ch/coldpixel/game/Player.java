@@ -24,6 +24,8 @@ public class Player {
     private final Texture character;
     //Movemenetspeed
     private final int walkSpeed = 200;
+    private float jumpSpeed = 1500;
+    private boolean canJump = false;
     private float velocity = 0;
     private final int runSpeed = (int) (walkSpeed * 1.5);
     private final float acceleration = 500;
@@ -53,7 +55,9 @@ public class Player {
         //DELETE THIS ABOVE
         if (!isFalling() && !space()) {
             velocity = 0;
+            canJump = true;
         }
+
         if (leftOrA()) {
             if (isRunning()) {
                 runLeft();
@@ -69,9 +73,16 @@ public class Player {
             }
         }
         //Jump
-        if (space() && !isFalling()) {
+        if (space() && canJump) {
             jump();
+        } else {
+            //phroibit double jump
+            if (jumpSpeed > 0 && jumpSpeed < 1500) {
+                canJump = false;
+            }
+            jumpSpeed = 1500;
         }
+
         // Gravitation
         fall();
 
@@ -124,14 +135,18 @@ public class Player {
     }
 
     private void jump() {
-        velocity = 3000;
-        this.setYPosition(this.getYPosition() + velocity * Gdx.graphics.getDeltaTime());
+        //change 100 to a variable
+        jumpSpeed = jumpSpeed - 100;
+        if (jumpSpeed <= 0) {
+            canJump = false;
+        }
+        this.setYPosition(this.getYPosition() + jumpSpeed * Gdx.graphics.getDeltaTime());
     }
 
     private void fall() {
-        if (isFalling() && !space()) {
+        //fall is activ if isfalling returns true and (the players doens't click space or can't jump anymore
+        if (isFalling() && (!space() || !canJump)) {
             velocity = velocity + acceleration * Gdx.graphics.getDeltaTime();
-
             this.setYPosition(this.getYPosition() - velocity * Gdx.graphics.getDeltaTime());
         }
     }
@@ -168,4 +183,4 @@ public class Player {
     public boolean isFalling() {
         return this.getYPosition() > 64;
     }
-} 
+}
