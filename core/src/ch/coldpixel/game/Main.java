@@ -3,6 +3,7 @@ package ch.coldpixel.game;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Main extends ApplicationAdapter {
@@ -64,8 +65,16 @@ public class Main extends ApplicationAdapter {
         mapdrawing.background();
         batch.begin();
         mapdrawing.MapRender(batch);
-        batch.draw(player.getCharacter(), player.getXPosition(), player.getYPosition());
+        //batch.draw(player.getCharacter(), player.getXPosition(), player.getYPosition());
+        //Animation
+        //https://github.com/libgdx/libgdx/wiki/2D-Animation
+        player.setStateTime(player.getStateTime() + Gdx.graphics.getDeltaTime());
+        player.setCurrentFrame(player.getAnimation().getKeyFrame(player.getStateTime(), true));
+        player.getSpriteBatch().begin();
+        player.getSpriteBatch().draw(player.getCurrentFrame(),  player.getXPosition(), player.getYPosition());
+        player.getSpriteBatch().end();
         batch.end();
+        
         player.movement();
         mapdrawing.showGrid();
         fps.log();
@@ -75,6 +84,6 @@ public class Main extends ApplicationAdapter {
     public void dispose() {
         batch.dispose();
         mapdrawing.shape.dispose();
-        player.getCharacter().dispose();
+      //  player.getCharacter().dispose();
     }
 }

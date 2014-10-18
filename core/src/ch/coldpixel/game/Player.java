@@ -7,6 +7,9 @@ package ch.coldpixel.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 
 /**
@@ -20,8 +23,6 @@ public class Player {
 //==============================================================================
     //Rectangle
     private final Rectangle player;
-    //Textures
-    private final Texture character;
     //Movemenetspeed
     private final int walkSpeed = 200;
     private float jumpSpeed = 1500;
@@ -29,6 +30,19 @@ public class Player {
     private float velocity = 0;
     private final int runSpeed = (int) (walkSpeed * 1.5);
     private final float acceleration = 500;
+    //Animation
+    //0=standing,1=falling,2=walking-left,3=walking-right,4=running-left,5=running-right,6=jump,7=attack ....
+    private int status;
+    private int oldstatus;
+    private static  int    FRAME_COLS = 3;
+    private static  int    FRAME_ROWS = 3;
+    private Animation           animation;
+    private Texture             sheet;
+    private TextureRegion[]     animFrames;
+    private SpriteBatch         spriteBatch;
+    private TextureRegion       currentFrame;
+    private float animationSpeed = 0.5f;
+    float stateTime; 
 //==============================================================================
 //Methods
 //==============================================================================
@@ -40,7 +54,20 @@ public class Player {
         player.y = y;
         player.width = 64;
         player.height = 64;
-        character = new Texture(Gdx.files.internal("GameCharacter_idle.png"));
+        status=1;
+        oldstatus=0;
+        sheet = new Texture(Gdx.files.internal("Standing.png"));
+        TextureRegion[][] tmp = TextureRegion.split(sheet, sheet.getWidth()/FRAME_COLS, sheet.getHeight()/FRAME_ROWS);              // #10
+        animFrames = new TextureRegion[FRAME_COLS * FRAME_ROWS];
+        int index = 0;
+        for (int i = 0; i < FRAME_ROWS; i++) {
+            for (int j = 0; j < FRAME_COLS; j++) {
+                animFrames[index++] = tmp[i][j];
+            }
+        }
+        animation = new Animation(animationSpeed, animFrames);        
+        spriteBatch = new SpriteBatch();
+        stateTime = 0f;
     }
 
     public void gravity() {
@@ -48,6 +75,8 @@ public class Player {
     }
 
     public void movement() {
+        statusChanged();
+        status=0;
         //DDELETE THIS
         if (r()) {
             resetPosition();
@@ -57,23 +86,27 @@ public class Player {
             velocity = 0;
             canJump = true;
         }
-
         if (leftOrA()) {
             if (isRunning()) {
+                status=4;
                 runLeft();
             } else {
+                status=2;
                 walkLeft();
             }
         }
         if (rightOrD()) {
             if (isRunning()) {
+                status=5;
                 runRight();
             } else {
+                status=3;
                 walkRight();
             }
         }
         //Jump
         if (space() && canJump) {
+            status=6;
             jump();
         } else {
             //phroibit double jump
@@ -86,6 +119,63 @@ public class Player {
         // Gravitation
         fall();
 
+    }
+    
+    //has to be called every time when the variable status changes
+     //0=standing,1=falling,2=walking-left,3=walking-right,4=running-left,5=running-right,6=jump,7=attack ....
+    private void statusChanged(){
+        //check if status has changed
+        if(oldstatus!=status){
+            //Set The Png 
+            switch(status){
+                //standing
+                case 0:
+                    FRAME_COLS = 3;
+                    FRAME_ROWS = 3;
+                    sheet = new Texture(Gdx.files.internal("Standing.png"));
+                    break;
+                //falling
+                case 1:
+                    //If Luca would create some Animations, this wouldn't be empty
+                    break;
+                //walking-left
+                case 2:
+                    FRAME_COLS = 2;
+                    FRAME_ROWS = 2;
+                    sheet = new Texture(Gdx.files.internal("WalkLeft.png"));
+                    break;
+                //walking-right
+                case 3:
+                    FRAME_COLS = 2;
+                    FRAME_ROWS = 2;
+                    sheet = new Texture(Gdx.files.internal("WalkRight.png"));
+                    break;
+                //running-left
+                case 4:
+                    //If Luca would create some Animations, this wouldn't be empty
+                    break;
+                //running-right
+                case 5:
+                    //If Luca would create some Animations, this wouldn't be empty
+                    break;
+                //jump
+                case 6:
+                    //If Luca would create some Animations, this wouldn't be empty
+                    break;
+            }
+            TextureRegion[][] tmp = TextureRegion.split(sheet, sheet.getWidth()/FRAME_COLS, sheet.getHeight()/FRAME_ROWS);              // #10
+            animFrames = new TextureRegion[FRAME_COLS * FRAME_ROWS];
+            int index = 0;
+            for (int i = 0; i < FRAME_ROWS; i++) {
+                for (int j = 0; j < FRAME_COLS; j++) {
+                    animFrames[index++] = tmp[i][j];
+                }
+            }
+            animation = new Animation(animationSpeed, animFrames);
+            spriteBatch = new SpriteBatch();
+            stateTime = 0f;
+            oldstatus=status;
+        }
     }
 
 //==============================================================================
@@ -147,6 +237,7 @@ public class Player {
         //fall is activ if isfalling returns true and (the players doens't click space or can't jump anymore
         if (isFalling() && (!space() || !canJump)) {
             velocity = velocity + acceleration * Gdx.graphics.getDeltaTime();
+            status=1;
             this.setYPosition(this.getYPosition() - velocity * Gdx.graphics.getDeltaTime());
         }
     }
@@ -161,9 +252,25 @@ public class Player {
     public float getYPosition() {
         return player.y;
     }
-
-    public Texture getCharacter() {
-        return character;
+    
+    public float getStateTime(){
+        return stateTime;
+    }
+    
+    public SpriteBatch getSpriteBatch(){
+        return spriteBatch;
+    }
+    
+    public Animation getAnimation(){
+        return animation;
+    }
+    
+    public TextureRegion getCurrentFrame(){
+        return currentFrame;
+    }
+    
+    public int getStatus(){
+        return status;
     }
 
 //==============================================================================
@@ -176,7 +283,13 @@ public class Player {
     public void setYPosition(float y) {
         player.y = y;
     }
-
+    
+    public void setStateTime(float stateTime){
+        this.stateTime = stateTime;
+    }
+    public void setCurrentFrame(TextureRegion currentFrame){
+        this.currentFrame = currentFrame;
+    }
 //==============================================================================
 //State
 //==============================================================================
