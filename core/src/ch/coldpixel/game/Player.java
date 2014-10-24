@@ -41,7 +41,7 @@ public class Player {
     private TextureRegion[]     animFrames;
     private SpriteBatch         spriteBatch;
     private TextureRegion       currentFrame;
-    private float animationSpeed = 0.5f;
+    private float animationSpeed = 0.2f;
     float stateTime; 
 //==============================================================================
 //Methods
@@ -146,9 +146,9 @@ public class Player {
                     break;
                 //walking-right
                 case 3:
-                    FRAME_COLS = 2;
+                    FRAME_COLS = 3;
                     FRAME_ROWS = 2;
-                    sheet = new Texture(Gdx.files.internal("WalkRight.png"));
+                    sheet = new Texture(Gdx.files.internal("Test.png"));
                     break;
                 //running-left
                 case 4:
@@ -238,6 +238,7 @@ public class Player {
         if (isFalling() && (!space() || !canJump)) {
             velocity = velocity + acceleration * Gdx.graphics.getDeltaTime();
             status=1;
+            System.out.println(velocity);
             this.setYPosition(this.getYPosition() - velocity * Gdx.graphics.getDeltaTime());
         }
     }
