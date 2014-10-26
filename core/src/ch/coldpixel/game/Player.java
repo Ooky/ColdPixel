@@ -25,7 +25,7 @@ public class Player {
     private final Rectangle player;
     //Movemenetspeed
     private final int walkSpeed = 200;
-    private float jumpSpeed = 1500;
+    private float jumpSpeed = 300;
     private boolean canJump = false;
     private float velocity = 0;
     private final int runSpeed = (int) (walkSpeed * 1.5);
@@ -226,7 +226,7 @@ public class Player {
 
     private void jump() {
         //change 100 to a variable
-        jumpSpeed = jumpSpeed - 100;
+        jumpSpeed = jumpSpeed - 150;
         if (jumpSpeed <= 0) {
             canJump = false;
         }
