@@ -4,6 +4,8 @@
  */
 package ch.coldpixel.game;
 
+import static ch.coldpixel.game.Main.LEVEL_1_HEIGTH;
+import static ch.coldpixel.game.Main.LEVEL_1_WIDTH;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Texture;
@@ -11,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Intersector;
 
 /**
  *
@@ -23,14 +26,16 @@ public class Player {
 //==============================================================================
     //Rectangle
     private final Rectangle player;
+    private final Rectangle r2;
+    final Rectangle[][] arrCollision;
     //Movemenetspeed
     private final int walkSpeed = 200;
-    private float jumpSpeed = 1000;
+    private float jumpSpeed = 50;
     private boolean canJump = false;
     private float velocity = 0;
     private final int runSpeed = (int) (walkSpeed * 1.5);
     private final float acceleration = 1000;
-    private final int gravity = 150;
+    private final int gravity = 10;
     //Animation
     //0=standing,1=falling,2=walk-left,3=walk-right,4=run-left
     //5=run-right,6=jump,7=attack
@@ -51,6 +56,13 @@ public class Player {
 //==============================================================================
     public Player(float x, float y) {
         player = new Rectangle();
+        arrCollision = new Rectangle[LEVEL_1_WIDTH / 16][LEVEL_1_HEIGTH / 16];
+        r2 = new Rectangle();
+
+        r2.x = x;
+        r2.y = y;
+        r2.width = 64;
+        r2.height = 64;
         player.x = x;
         player.y = y;
         player.width = 64;
@@ -71,10 +83,12 @@ public class Player {
         stateTime = 0f;
     }
 
-    public void movement() {
+    public void movement(Rectangle[][] arrCollision) {
         statusChanged();
         status = 0;
-        if (!isFalling() && !space()) {
+        arrCollision = this.arrCollision;
+
+        if (isColliding() && !space()) {
             velocity = 0;
             canJump = true;
         }
@@ -208,12 +222,13 @@ public class Player {
         if (jumpSpeed <= 0) {
             canJump = false;
         }
+        jumpSpeed = jumpSpeed + acceleration * Gdx.graphics.getDeltaTime();
         this.setYPosition(this.getYPosition() + jumpSpeed * Gdx.graphics.getDeltaTime());
     }
 
     private void fall() {
         //fall is activ if isfalling returns true and (the players doens't click space or can't jump anymore
-        if (isFalling() && (!space() || !canJump)) {
+        if (!isColliding() && (!space() || !canJump)) {
             velocity = velocity + acceleration * Gdx.graphics.getDeltaTime();
             status = 1;
             this.setYPosition(this.getYPosition() - velocity * Gdx.graphics.getDeltaTime());
@@ -273,7 +288,17 @@ public class Player {
 //State
 //==============================================================================
 
-    public boolean isFalling() {
-        return this.getYPosition() > 64;
+    public boolean isColliding() {
+
+        for (int i = 0; i < arrCollision.length - 1; i++) {
+
+            for (int j = 0; j < arrCollision[0].length - 1; j++) {
+                if (Intersector.overlaps(player, r2)) {
+                    return true; 
+                }
+            }
+
+        }
+        return false; 
     }
 }

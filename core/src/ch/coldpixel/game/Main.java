@@ -72,7 +72,9 @@ public class Main extends ApplicationAdapter {
         player.getSpriteBatch().end();
         batch.end();
         
-        player.movement();
+        player.movement(mapmodel.getArrCollision());
+        
+        
         mapdrawing.showGrid();
         fps.log();
     }
