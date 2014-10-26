@@ -25,39 +25,40 @@ public class Player {
     private final Rectangle player;
     //Movemenetspeed
     private final int walkSpeed = 200;
-    private float jumpSpeed = 1500;
+    private float jumpSpeed = 1000;
     private boolean canJump = false;
     private float velocity = 0;
     private final int runSpeed = (int) (walkSpeed * 1.5);
-    private final float acceleration = 500;
+    private final float acceleration = 1000;
+    private final int gravity = 150;
     //Animation
-    //0=standing,1=falling,2=walking-left,3=walking-right,4=running-left,5=running-right,6=jump,7=attack ....
+    //0=standing,1=falling,2=walk-left,3=walk-right,4=run-left
+    //5=run-right,6=jump,7=attack
     private int status;
     private int oldstatus;
-    private static  int    FRAME_COLS = 3;
-    private static  int    FRAME_ROWS = 3;
-    private Animation           animation;
-    private Texture             sheet;
-    private TextureRegion[]     animFrames;
-    private SpriteBatch         spriteBatch;
-    private TextureRegion       currentFrame;
-    private float animationSpeed = 0.2f;
-    float stateTime; 
+    private static int FRAME_COLS = 3;
+    private static int FRAME_ROWS = 3;
+    private Animation animation;
+    private Texture sheet;
+    private TextureRegion[] animFrames;
+    private SpriteBatch spriteBatch;
+    private TextureRegion currentFrame;
+    private final float animationSpeed = 0.2f;
+    float stateTime;
+
 //==============================================================================
 //Methods
 //==============================================================================
-    //constructor   x=Spawn X Coordinate y=Spawn Y Coordinate
-
     public Player(float x, float y) {
         player = new Rectangle();
         player.x = x;
         player.y = y;
         player.width = 64;
         player.height = 64;
-        status=1;
-        oldstatus=0;
+        status = 1;
+        oldstatus = 0;
         sheet = new Texture(Gdx.files.internal("Standing.png"));
-        TextureRegion[][] tmp = TextureRegion.split(sheet, sheet.getWidth()/FRAME_COLS, sheet.getHeight()/FRAME_ROWS);              // #10
+        TextureRegion[][] tmp = TextureRegion.split(sheet, sheet.getWidth() / FRAME_COLS, sheet.getHeight() / FRAME_ROWS);              // #10
         animFrames = new TextureRegion[FRAME_COLS * FRAME_ROWS];
         int index = 0;
         for (int i = 0; i < FRAME_ROWS; i++) {
@@ -65,51 +66,42 @@ public class Player {
                 animFrames[index++] = tmp[i][j];
             }
         }
-        animation = new Animation(animationSpeed, animFrames);        
+        animation = new Animation(animationSpeed, animFrames);
         spriteBatch = new SpriteBatch();
         stateTime = 0f;
     }
 
-    public void gravity() {
-        //TODO GRAVITY
-    }
-
     public void movement() {
         statusChanged();
-        status=0;
-        //DDELETE THIS
-        if (r()) {
-            resetPosition();
-        }
-        //DELETE THIS ABOVE
+        status = 0;
         if (!isFalling() && !space()) {
             velocity = 0;
             canJump = true;
         }
         if (leftOrA()) {
             if (isRunning()) {
-                status=4;
+                status = 4;
                 runLeft();
             } else {
-                status=2;
+                status = 2;
                 walkLeft();
             }
         }
         if (rightOrD()) {
             if (isRunning()) {
-                status=5;
+                status = 5;
                 runRight();
             } else {
-                status=3;
+                status = 3;
                 walkRight();
             }
         }
         //Jump
         if (space() && canJump) {
-            status=6;
+            status = 6;
             jump();
         } else {
-            //phroibit double jump
+            //prevent double jump
             if (jumpSpeed > 0 && jumpSpeed < 1500) {
                 canJump = false;
             }
@@ -120,14 +112,14 @@ public class Player {
         fall();
 
     }
-    
-    //has to be called every time when the variable status changes
-     //0=standing,1=falling,2=walking-left,3=walking-right,4=running-left,5=running-right,6=jump,7=attack ....
-    private void statusChanged(){
+
+    //0=standing,1=falling,2=walk-left,3=walk-right,4=run-left
+    //5=run-right,6=jump,7=attack
+    private void statusChanged() {
         //check if status has changed
-        if(oldstatus!=status){
+        if (oldstatus != status) {
             //Set The Png 
-            switch(status){
+            switch (status) {
                 //standing
                 case 0:
                     FRAME_COLS = 3;
@@ -136,34 +128,30 @@ public class Player {
                     break;
                 //falling
                 case 1:
-                    //If Luca would create some Animations, this wouldn't be empty
                     break;
-                //walking-left
+                //walk-left
                 case 2:
                     FRAME_COLS = 2;
                     FRAME_ROWS = 2;
                     sheet = new Texture(Gdx.files.internal("WalkLeft.png"));
                     break;
-                //walking-right
+                //walk-right
                 case 3:
                     FRAME_COLS = 3;
                     FRAME_ROWS = 2;
                     sheet = new Texture(Gdx.files.internal("Test.png"));
                     break;
-                //running-left
+                //run-left
                 case 4:
-                    //If Luca would create some Animations, this wouldn't be empty
                     break;
-                //running-right
+                //run-right
                 case 5:
-                    //If Luca would create some Animations, this wouldn't be empty
                     break;
                 //jump
                 case 6:
-                    //If Luca would create some Animations, this wouldn't be empty
                     break;
             }
-            TextureRegion[][] tmp = TextureRegion.split(sheet, sheet.getWidth()/FRAME_COLS, sheet.getHeight()/FRAME_ROWS);              // #10
+            TextureRegion[][] tmp = TextureRegion.split(sheet, sheet.getWidth() / FRAME_COLS, sheet.getHeight() / FRAME_ROWS);              // #10
             animFrames = new TextureRegion[FRAME_COLS * FRAME_ROWS];
             int index = 0;
             for (int i = 0; i < FRAME_ROWS; i++) {
@@ -174,22 +162,13 @@ public class Player {
             animation = new Animation(animationSpeed, animFrames);
             spriteBatch = new SpriteBatch();
             stateTime = 0f;
-            oldstatus=status;
+            oldstatus = status;
         }
     }
 
 //==============================================================================
 //Keycode
 //==============================================================================
-    //Resets Player position, but not speed
-    private boolean r() {
-        return Gdx.input.isKeyPressed(Keys.R);
-    }
-
-    private void resetPosition() {
-        this.setYPosition(500);
-    }
-
     //Movement
     private boolean leftOrA() {
         return Gdx.input.isKeyPressed(Keys.A) || Gdx.input.isKeyPressed(Keys.LEFT);
@@ -225,8 +204,7 @@ public class Player {
     }
 
     private void jump() {
-        //change 100 to a variable
-        jumpSpeed = jumpSpeed - 100;
+        jumpSpeed = jumpSpeed - gravity;
         if (jumpSpeed <= 0) {
             canJump = false;
         }
@@ -237,8 +215,7 @@ public class Player {
         //fall is activ if isfalling returns true and (the players doens't click space or can't jump anymore
         if (isFalling() && (!space() || !canJump)) {
             velocity = velocity + acceleration * Gdx.graphics.getDeltaTime();
-            status=1;
-            System.out.println(velocity);
+            status = 1;
             this.setYPosition(this.getYPosition() - velocity * Gdx.graphics.getDeltaTime());
         }
     }
@@ -253,24 +230,24 @@ public class Player {
     public float getYPosition() {
         return player.y;
     }
-    
-    public float getStateTime(){
+
+    public float getStateTime() {
         return stateTime;
     }
-    
-    public SpriteBatch getSpriteBatch(){
+
+    public SpriteBatch getSpriteBatch() {
         return spriteBatch;
     }
-    
-    public Animation getAnimation(){
+
+    public Animation getAnimation() {
         return animation;
     }
-    
-    public TextureRegion getCurrentFrame(){
+
+    public TextureRegion getCurrentFrame() {
         return currentFrame;
     }
-    
-    public int getStatus(){
+
+    public int getStatus() {
         return status;
     }
 
@@ -284,16 +261,18 @@ public class Player {
     public void setYPosition(float y) {
         player.y = y;
     }
-    
-    public void setStateTime(float stateTime){
+
+    public void setStateTime(float stateTime) {
         this.stateTime = stateTime;
     }
-    public void setCurrentFrame(TextureRegion currentFrame){
+
+    public void setCurrentFrame(TextureRegion currentFrame) {
         this.currentFrame = currentFrame;
     }
 //==============================================================================
 //State
 //==============================================================================
+
     public boolean isFalling() {
         return this.getYPosition() > 64;
     }
