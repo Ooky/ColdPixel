@@ -30,12 +30,12 @@ public class Player {
     final Rectangle[][] arrCollision;
     //Movemenetspeed
     private final int walkSpeed = 200;
-    private float jumpSpeed = 50;
+    private float jumpSpeed = 1000;
     private boolean canJump = false;
     private float velocity = 0;
     private final int runSpeed = (int) (walkSpeed * 1.5);
     private final float acceleration = 1000;
-    private final int gravity = 10;
+    private final int gravity = 150;
     //Animation
     //0=standing,1=falling,2=walk-left,3=walk-right,4=run-left
     //5=run-right,6=jump,7=attack
