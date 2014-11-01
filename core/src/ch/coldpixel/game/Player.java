@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Intersector;
+import java.util.List;
 
 /**
  *
@@ -27,7 +28,7 @@ public class Player {
     //Rectangle
     private final Rectangle player;
     private final Rectangle r2;
-    final Rectangle[][] arrCollision;
+    final List<Rectangle> arrCollision;
     //Movemenetspeed
     private final int walkSpeed = 200;
     private float jumpSpeed = 1000;
@@ -54,9 +55,10 @@ public class Player {
 //==============================================================================
 //Methods
 //==============================================================================
-    public Player(float x, float y) {
+    public Player(float x, float y,List<Rectangle> arrCollision) {
         player = new Rectangle();
-        arrCollision = new Rectangle[LEVEL_1_WIDTH / 16][LEVEL_1_HEIGTH / 16];
+       // this.arrCollision = new Rectangle[LEVEL_1_WIDTH / 16][LEVEL_1_HEIGTH / 16];
+        this.arrCollision = arrCollision;
         r2 = new Rectangle();
 
         r2.x = x;
@@ -83,10 +85,9 @@ public class Player {
         stateTime = 0f;
     }
 
-    public void movement(Rectangle[][] arrCollision) {
+    public void movement() {
         statusChanged();
-        status = 0;
-        arrCollision = this.arrCollision;
+        status = 0;        
 
         if (isColliding() && !space()) {
             velocity = 0;
@@ -289,15 +290,10 @@ public class Player {
 //==============================================================================
 
     public boolean isColliding() {
-
-        for (int i = 0; i < arrCollision.length - 1; i++) {
-
-            for (int j = 0; j < arrCollision[0].length - 1; j++) {
-                if (Intersector.overlaps(player, r2)) {
+        for(Rectangle rectangle: arrCollision){
+                if (Intersector.overlaps(player, rectangle)) {
                     return true; 
                 }
-            }
-
         }
         return false; 
     }

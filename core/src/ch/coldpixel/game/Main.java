@@ -45,8 +45,6 @@ public class Main extends ApplicationAdapter {
         fps = new FPSLogger();
         //Camera
         cam = new Camera();
-        //Player
-        player = new Player(0,320);
         //Load Level
         mapString = new Load();
         //Mapmodel
@@ -54,6 +52,8 @@ public class Main extends ApplicationAdapter {
         mapmodel.setMapModel(mapString.getLevel(1));
         //MapDrawing
         mapdrawing = new MapDrawing(TILESIZE, TILESIZE,mapmodel);
+        //Player
+        player = new Player(0,320,mapmodel.getArrCollision());
     }
 
     @Override
@@ -72,7 +72,7 @@ public class Main extends ApplicationAdapter {
         player.getSpriteBatch().end();
         batch.end();
         
-        player.movement(mapmodel.getArrCollision());
+        player.movement();
         
         
         mapdrawing.showGrid();

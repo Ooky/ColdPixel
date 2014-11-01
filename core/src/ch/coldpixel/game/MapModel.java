@@ -9,6 +9,9 @@ import static ch.coldpixel.game.Main.WINDOW_WIDTH;
 import static ch.coldpixel.game.Main.LEVEL_1_WIDTH;
 import static ch.coldpixel.game.Main.LEVEL_1_HEIGTH;
 import com.badlogic.gdx.math.Rectangle;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  *
@@ -21,8 +24,8 @@ public class MapModel {
 //==============================================================================
     //Array
     final int[][] arrTiles;
-    final Rectangle[][] arrCollision;
-    final Rectangle tmp;
+    private List<Rectangle> arrCollision;
+    private Rectangle tmp;
     //int loop array
     int x = 0;
 
@@ -32,19 +35,13 @@ public class MapModel {
     MapModel(int tileWidth, int tileHeight) {
         //Array
         arrTiles = new int[LEVEL_1_WIDTH / tileWidth][LEVEL_1_HEIGTH / tileHeight];
-        arrCollision = new Rectangle[LEVEL_1_WIDTH / tileWidth][LEVEL_1_HEIGTH / tileHeight];
-        tmp = new Rectangle();
+        arrCollision = new ArrayList<Rectangle>();
+        
         
         //0=Background
         for (int i = 0; i < arrTiles.length; i++) {
             for (int j = 0; j < arrTiles[0].length; j++) {
                 arrTiles[i][j] = 0;
-                
-                
-//                arrColli[i][j].x = 0;
-//                arrColli[i][j].y = 0;
-//                arrColli[i][j].width = 0;
-//                arrColli[i][j].height = 0;
             }
         }
     }
@@ -59,22 +56,19 @@ public class MapModel {
                     arrTiles[i][j] = Character.getNumericValue(mapString.charAt(x));
 
                     if (mapString.charAt(x) == '2') {
-
-                        tmp.x = i;
-                        tmp.y = j;
+                        tmp = new Rectangle();
+                        tmp.x = i*16;
+                        tmp.y = j*16;
                         tmp.width = 16;
                         tmp.height = 16;
-                        System.out.println(tmp);
-                        arrCollision[i][j] = (tmp);
-
+                        arrCollision.add(tmp);
                     }
                 }
                 x++;
             }
         }
-        System.out.println(mapString);
     }
-    Rectangle[][] getArrCollision() {
+    List<Rectangle> getArrCollision() {
         return arrCollision;
     }
     int[][] getArrTiles() {
