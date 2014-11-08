@@ -10,6 +10,7 @@ import static ch.coldpixel.game.Main.LEVEL_1_WIDTH;
 import static ch.coldpixel.game.Main.LEVEL_1_HEIGTH;
 import com.badlogic.gdx.math.Rectangle;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -25,6 +26,7 @@ public class MapModel {
     //Array
     final int[][] arrTiles;
     private List<Rectangle> arrCollision;
+    private List<String> mapArray;
     private Rectangle tmp;
     //int loop array
     int x = 0;
@@ -49,13 +51,20 @@ public class MapModel {
     void setMapModel(String mapString) {
         //remove linebreaks from string
         mapString = mapString.replaceAll("[\n\r]", "");
+        mapArray= Arrays.asList(mapString.split(";"));
         for (int j = arrTiles[0].length - 1; j >= 0; j--) {
             for (int i = arrTiles.length - 1; i >= 0; i--) {
-                if (mapString.charAt(x) != ' ') {
+                if (mapArray.get(x) != " ") {
                     //Get Character from File at Position X and change type to numeric(int)
-                    arrTiles[i][j] = Character.getNumericValue(mapString.charAt(x));
-
-                    if (mapString.charAt(x) == '2') {
+                    arrTiles[i][j] = Integer.parseInt(mapArray.get(x));
+                    //18;21;21;28;26;21;20;13
+                    if (mapArray.get(x).equals("2") 
+                            || mapArray.get(x).equals("18")
+                            || mapArray.get(x).equals("21")
+                            || mapArray.get(x).equals("28")
+                            || mapArray.get(x).equals("26")
+                            || mapArray.get(x).equals("20")
+                            || mapArray.get(x).equals("13")) {
                         tmp = new Rectangle();
                         tmp.x = i*16;
                         tmp.y = j*16;
