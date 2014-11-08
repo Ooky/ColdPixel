@@ -2,6 +2,7 @@ package ch.coldpixel.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -33,7 +34,8 @@ public class Main extends ApplicationAdapter {
     //Load Level
     Load mapString;
     private MapModel mapmodel;
-
+    //Music
+    Music music; 
 //==============================================================================
 //Methods
 //==============================================================================
@@ -54,6 +56,11 @@ public class Main extends ApplicationAdapter {
         mapdrawing = new MapDrawing(TILESIZE, TILESIZE,mapmodel);
         //Player
         player = new Player(0,320,mapmodel.getArrCollision());
+        //Music
+        music = Gdx.audio.newMusic(Gdx.files.internal("Kalimba.mp3"));
+        music.setVolume(0.2f);
+        music.play();
+        music.setLooping(true);
     }
 
     @Override
