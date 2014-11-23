@@ -55,7 +55,7 @@ public class Main extends ApplicationAdapter {
         //MapDrawing
         mapdrawing = new MapDrawing(TILESIZE, TILESIZE,mapmodel);
         //Player
-        player = new Player(0,320,mapmodel.getArrCollision());
+        player = new Player(0,320,mapmodel.getArrCollision(),mapmodel.getArrKillCollision());
         //Music
         music = Gdx.audio.newMusic(Gdx.files.internal("Kalimba.mp3"));
         music.setVolume(0.2f);

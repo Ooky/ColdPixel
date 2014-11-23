@@ -35,7 +35,7 @@ public class MapDrawing {
                 house1Right3,house1Right4,house1RightTop,house1SmokeStack,house1Top1,house1Top2,
                 house1Wall1,house1Wall2,house1Wall3,house1Window2LeftBottom,house1Window2LeftTop,
                 house1Window2RightBottom,house1Window2RightTop,house1WindowLeftBottom,
-                house1WindowLeftTop,house1WindowRightBottom,house1WindowRightTop;
+                house1WindowLeftTop,house1WindowRightBottom,house1WindowRightTop,Spikes1;
     //MapModel
     private MapModel mapmodel;
     //Array
@@ -82,6 +82,7 @@ public class MapDrawing {
         house1WindowLeftTop = new Texture(Gdx.files.internal("House1/house1WindowLeftTop.png"));
         house1WindowRightBottom = new Texture(Gdx.files.internal("House1/house1WindowRightBottom.png"));
         house1WindowRightTop = new Texture(Gdx.files.internal("House1/house1WindowRightTop.png"));
+        Spikes1 = new Texture(Gdx.files.internal("Spikes1.png"));
         //ShapeRenderer
         shape = new ShapeRenderer();
     }
@@ -219,6 +220,10 @@ public class MapDrawing {
                     //Window1 Right Top
                     case 32:
                         batch.draw(house1WindowRightTop, i * TILESIZE, j * TILESIZE);
+                        break;
+                    //Spikes1
+                    case 33:
+                        batch.draw(Spikes1, i * TILESIZE, j * TILESIZE);
                         break;
                 }
 

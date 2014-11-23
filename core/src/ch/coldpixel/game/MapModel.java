@@ -25,7 +25,7 @@ public class MapModel {
 //==============================================================================
     //Array
     final int[][] arrTiles;
-    private List<Rectangle> arrCollision;
+    private List<Rectangle> arrCollision,arrKillCollision;
     private List<String> mapArray;
     private Rectangle tmp;
     //int loop array
@@ -38,7 +38,7 @@ public class MapModel {
         //Array
         arrTiles = new int[LEVEL_1_WIDTH / tileWidth][LEVEL_1_HEIGTH / tileHeight];
         arrCollision = new ArrayList<Rectangle>();
-        
+        arrKillCollision = new ArrayList<Rectangle>();
         
         //0=Background
         for (int i = 0; i < arrTiles.length; i++) {
@@ -72,6 +72,14 @@ public class MapModel {
                         tmp.height = 16;
                         arrCollision.add(tmp);
                     }
+                    if (mapArray.get(x).equals("33")){
+                            tmp = new Rectangle();
+                            tmp.x = i*16;
+                            tmp.y = j*16;
+                            tmp.width = 16;
+                            tmp.height = 16;
+                            arrKillCollision.add(tmp);
+                    }
                 }
                 x++;
             }
@@ -79,6 +87,9 @@ public class MapModel {
     }
     List<Rectangle> getArrCollision() {
         return arrCollision;
+    }
+    List<Rectangle> getArrKillCollision() {
+        return arrKillCollision;
     }
     int[][] getArrTiles() {
         return arrTiles;

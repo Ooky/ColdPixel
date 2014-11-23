@@ -28,7 +28,7 @@ public class Player {
     //Rectangle
     private final Rectangle player;
     private final Rectangle r2;
-    final List<Rectangle> arrCollision;
+    final List<Rectangle> arrCollision,arrKillCollision;
     //Movemenetspeed
     private final int walkSpeed = 200;
     private float jumpSpeed = 1000;
@@ -55,10 +55,11 @@ public class Player {
 //==============================================================================
 //Methods
 //==============================================================================
-    public Player(float x, float y,List<Rectangle> arrCollision) {
+    public Player(float x, float y,List<Rectangle> arrCollision,List<Rectangle> arrKillCollision) {
         player = new Rectangle();
        // this.arrCollision = new Rectangle[LEVEL_1_WIDTH / 16][LEVEL_1_HEIGTH / 16];
         this.arrCollision = arrCollision;
+        this.arrKillCollision = arrKillCollision;
         r2 = new Rectangle();
 
         r2.x = x;
@@ -180,7 +181,10 @@ public class Player {
             oldstatus = status;
         }
     }
-
+    private void death(){
+        this.setXPosition(10);
+        this.setYPosition(80);
+    }
 //==============================================================================
 //Keycode
 //==============================================================================
@@ -295,6 +299,12 @@ public class Player {
                     return true; 
                 }
         }
+        for(Rectangle rectangle: arrKillCollision){
+            if(Intersector.overlaps(player, rectangle)){
+                death();
+            }
+        }
         return false; 
     }
+    
 }
